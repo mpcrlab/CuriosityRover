@@ -14,7 +14,7 @@ class RoverExtended(Rover):
         self.quit = False
         self.treads = [0,0]
 
-		# List of emotions: Searching, Intereted, Bored
+		# List of emotions: Searching, Intereted, Bored 
 		self.emotion = None
 		self.short_term_dict = LCADictionary()
 		self.long_term_dict = LCADictionary()
