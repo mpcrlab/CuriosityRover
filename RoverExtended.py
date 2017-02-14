@@ -38,11 +38,6 @@ class RoverExtended(Rover):
 
 	def run(self):
 		while not self.quit:
-			# If image is represented in short term, but not long term memory
-			# If image is represented in neither long or short term memory
-			# If image is represented in long term, but not short term memory
-			# If image is represented in both short term and long term memory
-
 			if self.short_term_dict.isImageRepresented(self.image):
 				# Clear short term memory, and move randomly
 				# until a new item is found that is not represented
@@ -54,9 +49,6 @@ class RoverExtended(Rover):
 				# long term dictionary with frames
 				self.short_term_dict.update(self.image)
 				self.long_term_dict.update(self.image)
-
-			if long_term_dict.isImageRepresented(self.image):
-				self.findSomethingNew(self.long_term_dict, self.image)
 
 			# Manual quit by user
 			for event in pygame.event.get():
