@@ -14,14 +14,14 @@ class RoverExtended(Rover):
         self.quit = False
         self.treads = [0,0]
 
-        # List of emotions: Searching, Intereted, Bored
-        self.emotion = None
-        self.short_term_dict = LCADictionary()
+		# List of emotions: Searching, Intereted, Bored
+		self.emotion = None
+		self.short_term_dict = LCADictionary()
 		self.long_term_dict = LCADictionary()
 
 		#Establish connection and image stream
 		while type(self.image) == type(None):
-	    	pass
+			pass
 
         self.run()
 
@@ -37,27 +37,26 @@ class RoverExtended(Rover):
 		pass
 
 	def run(self):
-		findSomethingNew(image)
 		while not self.quit:
 			# If image is represented in short term, but not long term memory
 			# If image is represented in neither long or short term memory
 			# If image is represented in long term, but not short term memory
 			# If image is represented in both short term and long term memory
 
-			if short_term_dict.isImageRepresented(self.image):
+			if self.short_term_dict.isImageRepresented(self.image):
 				# Clear short term memory, and move randomly
 				# until a new item is found that is not represented
 				# in long term
-				short_term_dict.clear()
-				findSomethingNew(long_term_dict, self.image)
+				self.short_term_dict.clear()
+				self.findSomethingNew(self.long_term_dict, self.image)
 			else:
 				# Continue to collect data and update both short and
 				# long term dictionary with frames
-				short_term_dict.update(self.image)
-				long_term_dict.update(self.image)
+				self.short_term_dict.update(self.image)
+				self.long_term_dict.update(self.image)
 
 			if long_term_dict.isImageRepresented(self.image):
-				findSomethingNew(long_term_dict, self.image)
+				self.findSomethingNew(self.long_term_dict, self.image)
 
 			# Manual quit by user
 			for event in pygame.event.get():
