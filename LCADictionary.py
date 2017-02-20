@@ -10,5 +10,5 @@ class LCADictionary():
     def clear(self):
         pass
 
-    def update(image):
+    def update(self, image):
         pass

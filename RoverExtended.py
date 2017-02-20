@@ -1,14 +1,22 @@
 import pygame
-import rover as Rover
+from rover import Rover
 import cv2
 import numpy as np
 import random
+import time
 
 from LCADictionary import *
 
 class RoverExtended(Rover):
     def __init__(self):
         Rover.__init__(self)
+        pygame.init()
+        pygame.display.set_caption('Dashboard')
+        self.dashboard = pygame.display.set_mode([700,480])
+        self.dashboard.fill((255,255,255))
+
+
+
         self.clock = pygame.time.Clock()
         self.FPS = 30
         self.image = None
@@ -52,38 +60,61 @@ class RoverExtended(Rover):
     def getUnstuck(self):
         pass
 
+
+    def rotateLeft(self, duration):
+        pass
+
+    def rotateRight(self, duration):
+        pass
+
+    def reverse(self, duration):
+        pass
+
     # Move randomly until a new item is found that is
     # not represented in long term
-    def findSomethingNew(self, dict, image):
+    def findSomethingNew(self, image):
         # While the rover is looking around and "understands" everything
         # Loop ends when it does NOT "understand" what it's looking at
-        while dict.isImageRepresented(image):
+        while self.long_term_dict.isImageRepresented(image):
             self.random_action(self.move_speed)
             if self.isStuck():
                 self.getUnstuck()
 
+    def end(self):
+        self.quit = True
+        self.treads = [0,0]
+        self.set_wheel_treads(0,0)
+        cv2.destroyAllWindows()
+        self.close()  
 
     def run(self):
-        if self.short_term_dict.isImageRepresented(self.image):
-            # Clear short term memory, and move randomly
-            # until a new item is found that is not represented
-            # in long term
-            self.short_term_dict.clear()
-            self.findSomethingNew(self.long_term_dict, self.image)
-        else:
-            # Continue to collect data and update both short and
-            # long term dictionary with frames
-            self.short_term_dict.update(self.image)
-            self.long_term_dict.update(self.image)
+    	while not self.quit:
+            # Manual quit by user
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if chr(event.key) in ['q','Q','z','Z']:
+                        self.quit = True
 
-        if long_term_dict.isImageRepresented(self.image):
-            self.findSomethingNew(self.long_term_dict, self.image)
+	        if self.short_term_dict.isImageRepresented(self.image):
+	            # Clear short term memory, and move randomly
+	            # until a new item is found that is not represented
+	            # in long term
+	            self.short_term_dict.clear()
+	            self.findSomethingNew(self.image)
+	        else:
+	            # Continue to collect data and update both short and
+	            # long term dictionary with frames
+	            self.short_term_dict.update(self.image)
+	            self.long_term_dict.update(self.image)
 
-        # Manual quit by user
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if chr(event.key) in ['q','Q']:
-                    self.quit = True
+	        if self.long_term_dict.isImageRepresented(self.image):
+	            self.findSomethingNew(self.image)
+	       
+            cv2.imshow("RoverCam", self.image)
+           
+            # Manages loop to be limited by FPS
+            self.clock.tick(self.FPS)
 
-        # Manages loop to be limited by FPS
-        self.clock.tick(self.FPS)
+            pygame.display.flip()
+            self.dashboard.fill((255,255,255))
+        self.end()
