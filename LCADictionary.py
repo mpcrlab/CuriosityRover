@@ -10,5 +10,7 @@ class LCADictionary():
     def clear(self):
         pass
 
+    # Updates dictionary with one 
+    # frame at a time
     def update(self, image):
         pass
