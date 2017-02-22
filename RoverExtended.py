@@ -76,6 +76,7 @@ class RoverExtended(Rover):
         # While the rover is looking around and "understands" everything
         # Loop ends when it does NOT "understand" what it's looking at
         while self.long_term_dict.isImageRepresented(image):
+	    print("Looking for something new")
             self.random_action(self.move_speed)
             if self.isStuck():
                 self.getUnstuck()
@@ -95,23 +96,26 @@ class RoverExtended(Rover):
                     if chr(event.key) in ['q','Q','z','Z']:
                         self.quit = True
 
-	        if self.short_term_dict.isImageRepresented(self.image):
-	            # Clear short term memory, and move randomly
-	            # until a new item is found that is not represented
-	            # in long term
-	            self.short_term_dict.clear()
-	            self.findSomethingNew(self.image)
-	        else:
-	            # Continue to collect data and update both short and
-	            # long term dictionary with frames
-	            self.short_term_dict.update(self.image)
-	            self.long_term_dict.update(self.image)
+            if self.short_term_dict.isImageRepresented(self.image):
+                # Clear short term memory, and move randomly
+                # until a new item is found that is not represented
+                # in long term
+                self.short_term_dict.clear()
+                print("Image is represented")
+                self.findSomethingNew(self.image)
+            else:
+                # Continue to collect data and update both short and
+                # long term dictionary with frames
+                print("Appending to dictionaries")
+                self.short_term_dict.update(self.image)
+                self.long_term_dict.update(self.image)
 
-	        if self.long_term_dict.isImageRepresented(self.image):
-	            self.findSomethingNew(self.image)
-	       
+            if self.long_term_dict.isImageRepresented(self.image):
+                print("Image is represented")
+                self.findSomethingNew(self.image)
+       
             cv2.imshow("RoverCam", self.image)
-           
+
             # Manages loop to be limited by FPS
             self.clock.tick(self.FPS)
 
